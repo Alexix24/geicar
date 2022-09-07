@@ -34,7 +34,7 @@ In another terminal :
 
 **The prompt is now "jetson@geicar"**
 
-### 5.Starting the ROS node (in the Jetson Nano board)
+### 5.Starting the ROS nodes (in the Jetson Nano board)
 Once you are connected to the Jetson Nano (prompt jetson@geicar) :
 
 1. Start and go into the docker container ros-humble : "sudo docker start -ai ros-humble", password : "geicar"
