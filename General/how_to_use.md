@@ -51,7 +51,7 @@ Once you are connected to the Jetson Nano (prompt jetson@geicar) :
 Once you have started the nodes in the Raspberry PI (step n°3), you can drive the car with the joystick in Manual Mode :
 
 1. Power ON the joystick
-2.Press "start" (you can see that the car is started in the Raspberry PI terminal, where you run ros2 launch : see step n°3)
+2. Press "start" (you can see that the car is started in the Raspberry PI terminal, where you run ros2 launch : see step n°3)
 3. You can select the mode : button "Y" for Manual (by default at startup), button "A" for Autonomous
 3. Control the car with LT, RT, and the left joystick
 4. Press B to stop the car
