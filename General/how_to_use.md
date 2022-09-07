@@ -45,17 +45,21 @@ Once you are connected to the Jetson Nano (prompt jetson@geicar) :
 
 **You can now see that the LIDAR is running and the camera is on**
 
-
+### 6.Stop the nodes and turn OFF the car
+1. Stop the nodes by pressing "Ctrl-C" in the launch terminals (in the Raspberry and in the Jetson)
+2. Exit ssh connections with "exit"
+3. Turn OFF the car by pressing the ON/OFF red button on the car
 
 
 ## Drive the car in manual mode (with the XBOX Controller)
-Once you have started the nodes in the Raspberry PI (step n°3), you can drive the car with the joystick in Manual Mode :
+Once you have started the nodes in the Raspberry PI (step n°3), you can drive the car with the joystick in Manual Mode **(make sure the car can move safely)** :
 
 1. Power ON the joystick
-2. Press "start" (you can see that the car is started in the Raspberry PI terminal, where you run ros2 launch : see step n°3)
-3. You can select the mode : button "Y" for Manual (by default at startup), button "A" for Autonomous
-3. Control the car with LT, RT, and the left joystick
-4. Press B to stop the car
+2. _**Optional, but recommanded on first use** You can start the steering calibration by pressing "DPAD Bottom" + "START". Then follow the instructions given in the launch terminal (ros2 launch) on the Raspberry._ 
+3. Press "start" (you can see that the car is started in the launch terminal (ros2 launch) on the Raspberry
+4. You can select the mode : button "Y" for Manual (by default at startup), button "A" for Autonomous
+5. Control the car with LT, RT, and the left joystick
+6. Press "B" to stop the car
 
 ## See all messages exchanged by ROS nodes (including sensors data)
 Once you have started the nodes (step n°3 and/or step n°5), you can see the different topics and messages published :
