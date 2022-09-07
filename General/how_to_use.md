@@ -38,6 +38,7 @@ In another terminal :
 Once you are connected to the Jetson Nano (prompt jetson@geicar) :
 
 1. Start and go into the docker container ros-humble : "sudo docker start -ai ros-humble", password : "geicar"
+
 **The prompt is now "root@geicar"**
 
 2. Run **"ros2 launch geicar_start_jetson geicar.jetson.launch.py"** to start the nodes that are in the jetson board (ie LIDAR and CAMERA)
