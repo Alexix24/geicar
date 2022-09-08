@@ -1,0 +1,230 @@
+# CAN Bus
+
+## Overview
+The CAN network provides communication between the various ECUs in the system. The code available is based on a set of pre-defined messages with their own identifier and payload.
+
+
+The CAN bus is configured with a **bitrate of 400 Kbit/s**.
+
+## CAN Configuration for STM32
+
+**Clock Tree:** APB1 frequency = 24 MHz
+
+**CAN configuration with CubeMX:**
+
+* Prescaler = 6 (for 4MhZ)
+* Time quantum (tq): tq = 1 / (f_APB1/prescaler) =  250 ns
+* Bit Segment 1 (BS1) = 7 tq
+* Bit Segment 2 (BS2) = 2 tq
+* Synchronization Jump Width (SJW) = 1 tq
+
+baudrate = 1 / [tq * (SJW + BS1 + BS2) ]  = 400 kBits/s
+
+## How to Use the PICAN 2
+On the Raspberry Pi the CAN uses the shield **PICAN 2**. This shield is designed by **CopperhillTech**. The procedure to configure the PICAN 2 is explained on the website of [CopperhillTech](https://copperhilltech.com/pican2-controller-area-network-can-interface-for-raspberry-pi/). Samples of C and python code are available on the web site as well as a set of programs to test the configuration. For example, the traffic on `can0` can be monitored with:
+
+~~~~
+./candump can0
+~~~~
+
+Main steps to config the Pican are :
+
+* Edit the file `/boot/firmware/config.txt` by:
+
+~~~~
+sudo nano /boot/firmware/config.txt
+~~~~
+
+* Add these 3 lines to the end of file:
+
+~~~~
+dtparam=spi=on
+dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
+dtoverlay=spi-bcm2835-overlay
+~~~~
+
+* Reboot the Raspberry Pi:
+
+~~~~
+sudo reboot
+~~~~
+
+* Initialize the CAN interface by entering:
+
+~~~~
+sudo /sbin/ip link set can0 up type can bitrate 400000
+~~~~
+
+
+
+## Description of the CAN Messages
+
+### MOTORS_CMD
+
+* **From:** Raspeberry
+* **To:** NucleoF103
+* **Lenght (Bytes):** 3
+* **ID:** 0x100
+* **Data field:**
+
+|Byte 0 |Byte 1 | Byte 2|
+|:------|:------|:------|
+|LeftRear | RightRear | Steering |
+
+* **LeftRear: Left rear motor command**
+		*This byte is used to control the speed of the left rear motor. The value 0 is the maximum speed backwards. The value 50 stops the motor. The value 100 is the maximum value forward.
+		*value between 0% and 100%.
+
+* **RightRear: Right rear motor command**
+		This byte is used to control the speed of the right rear motor. The value 0 is the maximum speed backwards. The value 50 stops the motor. The value 100 is the maximum value forward.
+		*value between 0% and 100%.
+
+* **Steering: Steering motor command**
+		This byte is used to control the speed of the steering motor. The value 0 is the maximum speed right. The value 50 stops the motor. The value 100 is the maximum speed left.
+		
+		*value between 0% and 100%.
+
+
+
+### MOTORS_DATA (Odometry, Speed, Steering angle)
+
+* **From:** NucleoF103
+* **To:** Raspeberry
+* **Lenght (Bytes):** 7
+* **ID:** 0x200
+* **Data field:**
+
+|Byte 0 |Byte 1 |Bytes 2-3| Bytes 4-5| Byte 6 |
+|:------|:------|:------|:------|
+|LeftRearOdometry | RightRearOdometry | LeftRearSpeed | RightRearSpeed | SteeringAngle |
+
+* **LeftRearOdometry: Number of magnetic sensor pulses since the last frame (left rear wheel)**
+	* Bits 15-0: Raw data from the angle sensor on the steering wheel.
+* **LeftRearSpeed: Left Rear Motor Speed**	
+	* Bits 15-0: Raw data from the battery sensor. The value is between 0 and 0xFFF. The battery level U (V) can be computed by U = (4095 / Bat\_mes) * (3.3 / 0.2). The nominal operation of the battery has to be between 11 and 14 V. 
+* **RightRearSpeed: Right Rear Motor Speed**	
+	* Bits 15-0: The speed of the left rear motor in *0.01 rpm. The direction of rotation of the motor must be deduced from the command.
+* **SteeringAngle: Steering Wheel Angle**	
+	* Bits 15-0: The speed of the right rear motor in *0.01 rpm. The direction of rotation of the motor must be deduced from the command.
+
+### Ultrasonic Sensors 1 (US1)
+
+* **From:** Discovery
+* **To:** Raspeberry
+* **Lenght (Bytes):** 6
+* **Data field:**
+
+|Bytes 0-1 |Bytes 2-3| Bytes 4-5|
+|:------|:------|:------|
+|US_AVG | US_AVD | US_ARC|
+
+* **US_AVG: Front Left Ultrasonic**
+	* bits 15-0: distance in cm measured by the front left ultrasonic sensor.
+* **US_AVD: Front Right Ultrasonic**
+	* bits 15-0: distance in cm measured by the front right ultrasonic sensor.
+* **US_ARC: Central Rear Ultrasonic**
+	* bits 15-0: distance in cm measured by the central rear ultrasonic sensor.
+
+### Ultrasonic Sensors 2 (US2)
+
+* **From:** Discovery
+* **To:** Raspeberry
+* **Lenght (Bytes):** 6
+* **Data field:**
+
+|Bytes 0-1 |Bytes 2-3| Bytes 4-5|
+|:------|:------|:------|
+|US_ARG | US_ARD | US_AVC|
+
+* **US_ARG: Left Rear Ultrasonic**
+	* bits 15-0: distance in cm measured by the left rear ultrasonic sensor.
+* **US_ARD: Right Rear Ultrasonic**
+	* bits 15-0: distance in cm measured by the right rear ultrasonic sensor.
+* **US_AVC: Central Front Ultrasonic**
+	* bits 15-0: distance in cm measured by the central front ultrasonic sensor.
+
+### Orientation Measures 1 (OM1)
+
+![CAN Bus](./figures/orientation_car.jpg)
+
+* **From:** Discovery
+* **To:** Raspeberry
+* **Lenght (Bytes):** 8
+* **Data field:**
+
+|Bytes 0-3 |Bytes 4-7|
+|:------|:------|
+|Yaw | Pitch |
+
+* **Yaw: Yaw Angle**
+	* bits 31-0: value in float of the yaw angle in degree.
+* **Pitch: Pitch Angle**
+	* bits 31-0: value in float of the pitch angle in degree.
+
+### Orientation Measures 2 (OM2)
+* **From:** Discovery
+* **To:** Raspeberry
+* **Lenght (Bytes):** 4
+* **Data field:**
+
+|Bytes 0-3 |
+|:------|
+|Roll |
+
+* **Roll: Roll Angle**
+	* bits 31-0: value in float of the roll angle in degree.
+
+### Speed & Steering Commands (SSC)
+
+* **From:** Raspeberry
+* **To:** NucleoF103
+* **Lenght (Bytes):** 2
+* **Data field:**
+
+* The SSC mode allows a differential between left and right wheels for more effective turns.
+
+|Byte 0 |Byte 1 |
+|:------|:------|
+|SpeedMode | SteerMode |
+
+* **SpeedMode: requested speed mode**
+	* Bit 7-0: Command bits.
+		This bit-field is used to control the speed of the car. The value must be between 0 and 100. 
+		The available modes are: 
+		* DISABLED 	: 0x00
+		* STOP 		: 0x32 //Arret
+		* REVERSE 	: 0x28 //Marche arriere
+		* WALK 		: 0x3C //Premiere 
+		* JOG 		: 0x41 //Seconde
+		* RUN 		: 0x4B //Troisieme
+
+		_Note:_ To avoid power problem, the motor's PWM is limited by software.
+
+* **SteerMode: requested steering mode**
+	* Bits 7-0: Command bits.
+		This bit-field is used to control the steering of the car. The value must be between 0 and 100.The value 0 would be the maximum angle to the left. The value 50 would be going straight forward. The value 100 is the maximum angle to the right.
+		The available modes are : 
+		* DISABLED 	: 0x00
+		* STRAIGHT 	: 0x32 //Roues droites
+		* HARD_L	: 0x0A //Hard turn to the left
+		* MODT_L	: 0x19 //Moderate turn to the left
+		* SOFT_L	: 0x28 //Soft turn to the left
+		* HARD_R	: 0x5A //Hard turn to the right
+		* MODT_R	: 0x4B //Moderate turn to the right
+		* SOFT_R	: 0x3C //soft turn to the right
+
+		_Note:_ The maximum turning radius to the left and right are limited by mechanic.
+
+
+## IDs of the CAN Messages
+
+|Name                        |Class ID |SubClass ID|Priority |ID    |
+|----------------------------|:-------:|:---------:|:-------:|:----:|
+|                            |3bits    |4bits      |4bits    |11bits|
+|Control Motor Commands (CMC)|0x0      |0x1        |0x0      |0x010 |
+|Motor Sensors (MS)          |0x1      |0x0        |0x0      |0x100 |
+|Ultrasonic Sensors 1 (US1)  |0x0      |0x0        |0x0      |0x000 |
+|Ultrasonic Sensors 2 (US2)  |0x0      |0x0        |0x1      |0x001 |
+|Orientation Measures 1 (OM1)|0x1      |0x0        |0x1      |0x101 |
+|Orientation Measures 2 (OM2)|0x1      |0x0        |0x2      |0x102 |
+|Speed&Steering Command (SSC)|0x0      |0x2        |0x0      |0x020 |
