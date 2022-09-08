@@ -178,20 +178,35 @@ sudo apt install ~nros-humble-rqt*
 sudo apt install python3-rosdep2
 update rosdep
 ```
+4. Install the Raspberry ROS2 workspace :
+```sh
+cd ~
+git clone **...................**
+```
 
-4. Initialize rosdep dependencies **(in ~/ros2_ws)** :
+5. Initialize rosdep dependencies **(in ~/ros2_ws)** :
 ```sh
 cd ~/ros2_ws
 rosdep install -i --from-path src --rosdistro humble -y
 ```
 
-5. Install colcon tools :
+6. Install colcon tools :
 ```sh
 sudo apt install python3-colcon-common-extensions
 ```
 
-6. **Optional** You can install "Turtlesim" package to test your ROS installation :
+7. Compile and source :
 ```sh
-sudo apt update
-sudo apt install ros-humble-turtlesim
+cd ~/ros2_ws
+colcon build
+source ~/ros2_ws/install/local_setup.bash
+source /opt/ros/humble/setup.bash
+```
+
+8. Source the ROS environment and set the ROS_DOMAIN_ID\
+**Replace XX by the car number (1,2,3,4 ...). Example : "export ROS_DOMAIN_ID=1" for the car n°1**
+```sh
+echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+echo "source ~/ros2_ws/install/local_setup.bash" >> ~/.bashrc
+echo "export ROS_DOMAIN_ID=XX" >> ~/.bashrc
 ```
