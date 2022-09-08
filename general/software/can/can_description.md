@@ -61,7 +61,7 @@ sudo /sbin/ip link set can0 up type can bitrate 400000
 
 ### MOTORS_CMD
 
-* **From:** Raspeberry
+* **From:** Raspberry
 * **To:** NucleoF103
 * **Lenght (Bytes):** 3
 * **ID:** 0x100
@@ -71,8 +71,10 @@ sudo /sbin/ip link set can0 up type can bitrate 400000
 |:------|:------|:------|
 |LeftRear | RightRear | Steering |
 
+Values between 0% and 100%.
+
 * **LeftRear: Left rear motor command**
-		*This byte is used to control the speed of the left rear motor. The value 0 is the maximum speed backwards. The value 50 stops the motor. The value 100 is the maximum value forward.
+		This byte is used to control the speed of the left rear motor. The value 0 is the maximum speed backwards. The value 50 stops the motor. The value 100 is the maximum value forward.
 		*value between 0% and 100%.
 
 * **RightRear: Right rear motor command**
@@ -82,138 +84,164 @@ sudo /sbin/ip link set can0 up type can bitrate 400000
 * **Steering: Steering motor command**
 		This byte is used to control the speed of the steering motor. The value 0 is the maximum speed right. The value 50 stops the motor. The value 100 is the maximum speed left.
 		
-		*value between 0% and 100%.
 
 
 
 ### MOTORS_DATA (Odometry, Speed, Steering angle)
 
 * **From:** NucleoF103
-* **To:** Raspeberry
+* **To:** Raspberry
 * **Lenght (Bytes):** 7
 * **ID:** 0x200
 * **Data field:**
 
 |Byte 0 |Byte 1 |Bytes 2-3| Bytes 4-5| Byte 6 |
-|:------|:------|:------|:------|
+|:------|:------|:------|:------|:------|
 |LeftRearOdometry | RightRearOdometry | LeftRearSpeed | RightRearSpeed | SteeringAngle |
 
-* **LeftRearOdometry: Number of magnetic sensor pulses since the last frame (left rear wheel)**
-	* Bits 15-0: Raw data from the angle sensor on the steering wheel.
+* **LeftRearOdometry: Number of magnetic sensor pulses since the last frame (left rear motor)**
+* **RightRearOdometry: Number of magnetic sensor pulses since the last frame (right rear motor)**
 * **LeftRearSpeed: Left Rear Motor Speed**	
-	* Bits 15-0: Raw data from the battery sensor. The value is between 0 and 0xFFF. The battery level U (V) can be computed by U = (4095 / Bat\_mes) * (3.3 / 0.2). The nominal operation of the battery has to be between 11 and 14 V. 
+	* The speed of the left rear motor in *0.01 rpm. The direction of rotation of the motor must be deduced from the command.
 * **RightRearSpeed: Right Rear Motor Speed**	
-	* Bits 15-0: The speed of the left rear motor in *0.01 rpm. The direction of rotation of the motor must be deduced from the command.
+	* The speed of the left rear motor in *0.01 rpm. The direction of rotation of the motor must be deduced from the command.
 * **SteeringAngle: Steering Wheel Angle**	
-	* Bits 15-0: The speed of the right rear motor in *0.01 rpm. The direction of rotation of the motor must be deduced from the command.
+	* Steering wheel angle between 0 (full left) and 200 (full right)
 
 ### Ultrasonic Sensors 1 (US1)
 
-* **From:** Discovery
-* **To:** Raspeberry
+* **From:** NucleoF103
+* **To:** Raspberry
 * **Lenght (Bytes):** 6
+* **ID:** 0x211
 * **Data field:**
 
 |Bytes 0-1 |Bytes 2-3| Bytes 4-5|
 |:------|:------|:------|
-|US_AVG | US_AVD | US_ARC|
+|FrontLeft | FrontCenter | FrontRight|
 
-* **US_AVG: Front Left Ultrasonic**
-	* bits 15-0: distance in cm measured by the front left ultrasonic sensor.
-* **US_AVD: Front Right Ultrasonic**
-	* bits 15-0: distance in cm measured by the front right ultrasonic sensor.
-* **US_ARC: Central Rear Ultrasonic**
-	* bits 15-0: distance in cm measured by the central rear ultrasonic sensor.
+* **FrontLeft: Front Left Ultrasonic**
+	* distance in cm measured by the front left ultrasonic sensor.
+* **FrontCenter: Front Center Ultrasonic**
+	* distance in cm measured by the front center ultrasonic sensor.
+* **FrontRight: Front Right Ultrasonic**
+	* distance in cm measured by the front right ultrasonic sensor.
+
+Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a distance greater than or equal to 536cm**
 
 ### Ultrasonic Sensors 2 (US2)
 
-* **From:** Discovery
-* **To:** Raspeberry
+* **From:** NucleoF103
+* **To:** Raspberry
 * **Lenght (Bytes):** 6
+* **ID:** 0x221
 * **Data field:**
 
 |Bytes 0-1 |Bytes 2-3| Bytes 4-5|
 |:------|:------|:------|
-|US_ARG | US_ARD | US_AVC|
+|RearLeft | RearCenter | RearRight|
 
-* **US_ARG: Left Rear Ultrasonic**
-	* bits 15-0: distance in cm measured by the left rear ultrasonic sensor.
-* **US_ARD: Right Rear Ultrasonic**
-	* bits 15-0: distance in cm measured by the right rear ultrasonic sensor.
-* **US_AVC: Central Front Ultrasonic**
-	* bits 15-0: distance in cm measured by the central front ultrasonic sensor.
+* **RearLeft: Rear Left Ultrasonic**
+	* distance in cm measured by the rear left ultrasonic sensor.
+* **RearCenter: Rear Center Ultrasonic**
+	* distance in cm measured by the rear center ultrasonic sensor.
+* **RearRight: Rear Right Ultrasonic**
+	* distance in cm measured by the rear right ultrasonic sensor.
 
-### Orientation Measures 1 (OM1)
+Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a distance greater than or equal to 536cm**
 
-![CAN Bus](./figures/orientation_car.jpg)
 
-* **From:** Discovery
-* **To:** Raspeberry
-* **Lenght (Bytes):** 8
+### Magnetic field (IMU1)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 7
+* **ID:** 0x232
 * **Data field:**
 
-|Bytes 0-3 |Bytes 4-7|
-|:------|:------|
-|Yaw | Pitch |
+|Bytes 0-1 |Bytes 2-3| Bytes 4-5| Byte 6|
+|:------|:------|:------|:------|
+|x axis | Y axis | Z axis| Sign|
 
-* **Yaw: Yaw Angle**
-	* bits 31-0: value in float of the yaw angle in degree.
-* **Pitch: Pitch Angle**
-	* bits 31-0: value in float of the pitch angle in degree.
+* **X axis: Magnetic field measured on the x axis in microtesla (µT)**
+* **Y axis: Magnetic field measured on the y axis in microtesla (µT)**
+* **Z axis: Magnetic field measured on the z axis in microtesla (µT)**
+* **Sign :** 
+	* bit 0: sign of the z axis value (0 : positive ; 1 : negative)
+	* bit 1 : sign of the y axis value (0 : positive ; 1 : negative)
+	* bit 2 : sign of the x axis value (0 : positive ; 1 : negative)
 
-### Orientation Measures 2 (OM2)
-* **From:** Discovery
-* **To:** Raspeberry
-* **Lenght (Bytes):** 4
+### Angular velocity (IMU2)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 7
+* **ID:** 0x242
 * **Data field:**
 
-|Bytes 0-3 |
+|Bytes 0-1 |Bytes 2-3| Bytes 4-5| Byte 6|
+|:------|:------|:------|:------|
+|x axis | Y axis | Z axis| Sign|
+
+* **X axis: Angular velocity measured on the x axis in rad/s**
+* **Y axis: Angular velocity measured on the y axis in rad/s**
+* **Z axis: Angular velocity measured on the z axis in rad/s**
+* **Sign :** 
+	* bit 0 : sign of the z axis value (0 : positive ; 1 : negative)
+	* bit 1 : sign of the y axis value (0 : positive ; 1 : negative)
+	* bit 2 : sign of the x axis value (0 : positive ; 1 : negative)
+
+### Linear acceleration (IMU3)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 7
+* **ID:** 0x252
+* **Data field:**
+
+|Bytes 0-1 |Bytes 2-3| Bytes 4-5| Byte 6|
+|:------|:------|:------|:------|
+|x axis | Y axis | Z axis| Sign|
+
+* **X axis: Linear acceleration measured on the x axis in m/s²**
+* **Y axis: Linear acceleration measured on the y axis in m/s²**
+* **Z axis: Linear acceleration measured on the z axis in m/s²**
+* **Sign :** 
+	* bit 0 : sign of the z axis value (0 : positive ; 1 : negative)
+	* bit 1 : sign of the y axis value (0 : positive ; 1 : negative)
+	* bit 2 : sign of the x axis value (0 : positive ; 1 : negative)
+
+
+### General data (IMU4)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 5
+* **ID:** 0x263
+* **Data field:**
+
+|Bytes 0-1 |Bytes 2-3| Byte 4|
+|:------|:------|:------|
+|Temperature | Pressure | Humidity|
+
+* **Temperature: Temperature measured in *10 °C**
+* **Pressure: Pressure measured in hPa**
+* **Humidity: Humidity measured %**
+
+### Battery Level
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 1
+* **ID:** 0x273
+* **Data field:**
+
+|Byte 0|
 |:------|
-|Roll |
+|Battery Level |
 
-* **Roll: Roll Angle**
-	* bits 31-0: value in float of the roll angle in degree.
-
-### Speed & Steering Commands (SSC)
-
-* **From:** Raspeberry
-* **To:** NucleoF103
-* **Lenght (Bytes):** 2
-* **Data field:**
-
-* The SSC mode allows a differential between left and right wheels for more effective turns.
-
-|Byte 0 |Byte 1 |
-|:------|:------|
-|SpeedMode | SteerMode |
-
-* **SpeedMode: requested speed mode**
-	* Bit 7-0: Command bits.
-		This bit-field is used to control the speed of the car. The value must be between 0 and 100. 
-		The available modes are: 
-		* DISABLED 	: 0x00
-		* STOP 		: 0x32 //Arret
-		* REVERSE 	: 0x28 //Marche arriere
-		* WALK 		: 0x3C //Premiere 
-		* JOG 		: 0x41 //Seconde
-		* RUN 		: 0x4B //Troisieme
-
-		_Note:_ To avoid power problem, the motor's PWM is limited by software.
-
-* **SteerMode: requested steering mode**
-	* Bits 7-0: Command bits.
-		This bit-field is used to control the steering of the car. The value must be between 0 and 100.The value 0 would be the maximum angle to the left. The value 50 would be going straight forward. The value 100 is the maximum angle to the right.
-		The available modes are : 
-		* DISABLED 	: 0x00
-		* STRAIGHT 	: 0x32 //Roues droites
-		* HARD_L	: 0x0A //Hard turn to the left
-		* MODT_L	: 0x19 //Moderate turn to the left
-		* SOFT_L	: 0x28 //Soft turn to the left
-		* HARD_R	: 0x5A //Hard turn to the right
-		* MODT_R	: 0x4B //Moderate turn to the right
-		* SOFT_R	: 0x3C //soft turn to the right
-
-		_Note:_ The maximum turning radius to the left and right are limited by mechanic.
+* **Battery level : Raw data from the battery sensor**\
+The value is between 0 and 0xFFF. The battery level U(V) can be computed by U = batMes * (11.65/2794.0). The nominal operation of the battery has to be between 11 and 14 V.**
 
 
 ## IDs of the CAN Messages
@@ -221,10 +249,16 @@ sudo /sbin/ip link set can0 up type can bitrate 400000
 |Name                        |Class ID |SubClass ID|Priority |ID    |
 |----------------------------|:-------:|:---------:|:-------:|:----:|
 |                            |3bits    |4bits      |4bits    |11bits|
-|Control Motor Commands (CMC)|0x0      |0x1        |0x0      |0x010 |
-|Motor Sensors (MS)          |0x1      |0x0        |0x0      |0x100 |
-|Ultrasonic Sensors 1 (US1)  |0x0      |0x0        |0x0      |0x000 |
-|Ultrasonic Sensors 2 (US2)  |0x0      |0x0        |0x1      |0x001 |
-|Orientation Measures 1 (OM1)|0x1      |0x0        |0x1      |0x101 |
-|Orientation Measures 2 (OM2)|0x1      |0x0        |0x2      |0x102 |
-|Speed&Steering Command (SSC)|0x0      |0x2        |0x0      |0x020 |
+|MOTORS_CMD		     |0x1      |0x0        |0x0      |0x100 |
+|MOTORS_DATAS	             |0x2      |0x0        |0x0      |0x200 |
+|Ultrasonic Sensors 1 (US1)  |0x2      |0x1        |0x1      |0x211 |
+|Ultrasonic Sensors 2 (US2)  |0x2      |0x2        |0x1      |0x221 |
+|IMU1 : Magnetic field	     |0x2      |0x3        |0x2      |0x232 |
+|IMU2 : Angular velocity     |0x2      |0x4        |0x2      |0x242 |
+|IMU3 : Linear acceleration  |0x2      |0x5        |0x2      |0x252 |
+|IMU4 : General		     |0x2      |0x6        |0x3      |0x263 |
+|Battery Level		     |0x2      |0x7        |0x3      |0x273 |
+|GPS1 : Latitude	     |0x2      |0x7        |0x2      |0x272 |
+|GPS2 : Longitude	     |0x2      |0x8        |0x2      |0x282 |
+|GPS3 : Altitude	     |0x2      |0x9        |0x2      |0x292 |
+|Calibration Mode	     |0x3      |0x0        |0x0      |0x300 |
