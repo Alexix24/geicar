@@ -1,4 +1,4 @@
-### This files describes the steps to configure the Raspberry PI, from the OS to the ROS installation
+### This file describes the steps to configure the Raspberry PI, from the OS to the ROS installation
 
 **An image of the SD card with all the necessary configurations and the initial ROS nodes is available here : .....**
 
