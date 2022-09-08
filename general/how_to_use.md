@@ -10,7 +10,10 @@
 **All the system is now powered**
 
 ### 2.Connection to the Raspberry PI
-By default, the raspberry pi board connects to the IoT network at startup. It is also possible to connect the board to any other network by modifying the file "/etc/netplan/50-cloud-init.yaml".
+By default, the raspberry pi board connects to the IoT network at startup. 
+
+_It is also possible to connect the board to any other network by modifying the file "/etc/netplan/50-cloud-init.yaml". You can edit this file directly from the SD card.
+Sometimes the raspberry can't connect to the IoT network. This may be a problem with the network itself, or it may be that the date/time in the raspberry has drifted too much (there is no RTC). It is therefore advisable to add your own access point (e.g. your phone) to always be able to access the card._
 
 1. Connect your pc to the same network as the raspberry (by default the IoT network)
 2. Connect to the raspberryPi via ssh **(adapt the IP address according to the car and the network used)** : 
