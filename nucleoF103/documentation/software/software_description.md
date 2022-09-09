@@ -2,7 +2,7 @@
 
 ## Pin configuration
 
-The Nucleo board controls the vehicle's engines and steering, the ultrasonic sensors and the battery level. The full description of the port configuration is provided in the file [nucleoF103_hardware_interface] (../hardware/nucleoF103_hardware_interface.pdf)
+The Nucleo board controls the vehicle's engines and steering, the ultrasonic sensors and the battery level. The full description of the port configuration is provided in the file [nucleoF103_hardware_interface](../hardware/nucleoF103_hardware_interface.pdf)
 
 
 ### Power switch
@@ -39,7 +39,7 @@ The Nucleo board controls the vehicle's engines and steering, the ultrasonic sen
 | Port | Configuration | Remap | Description                  |
 |------|---------------|-------|------------------------------|
 | PB14 | Input Pullup  | —     | Status of the right button | 
-| PB15 | Input Pullup  | —     | Status of the right button | 
+| PB15 | Input Pullup  | —     | Status of the left button | 
 
 ### Steering wheel motor
 | Port | Configuration | Remap | Description                  |
@@ -48,6 +48,24 @@ The Nucleo board controls the vehicle's engines and steering, the ultrasonic sen
 | PA10 | AF Output PP  | TIM1 CH3 |  Control steering motor (IN1) |
 | PB1  | AF Output PP  | TIM1 CH3N|  Control steering motor (IN2) |
 | PC0  | Analog Input  | ADC1 IN10 | Current steering motor      |
+
+### Ultrasonic sensors
+#### Trigger pins
+| Port | Configuration | Remap | Description                  |
+|------|---------------|-------|------------------------------|
+| PC1  | Output PP  | -        | Front left us trigger        |
+| PC2  | Output PP  | -        | Front center us trigger      |
+| PC3  | Output PP  | -        | Front right us trigger       |
+| PC4  | Output PP  | -        | Rear left us trigger         |
+| PC5  | Output PP  | -        | Rear center us trigger       |
+| PC7  | Output PP  | -        | Rear right us trigger        |
+
+#### Echo pins
+| Port | Configuration | Remap | Description                  |
+|------|---------------|-------|------------------------------|
+| PC6  |IT Rising Falling| -   | Right us echo                |
+| PC8  |IT Rising Falling| -   | Left us echo                 |
+| PC9  |IT Rising Falling| -   | Center us echo               |
 
 ### CAN bus
 | Port | Configuration | Remap | Description                  |
@@ -94,9 +112,12 @@ The motor control of the wheels is done by calling the function `wheels_set_spee
 
 ### Ultrasonic measurements
 
-The car is equipped with 6 ultrasonic sensors. To measure a distance, we send a 10us signal on the Trigger pin of the sensor. In return, the function `HAL_GPIO_EXTI_Callback` (file `main.c`) measures the duration of the signal on the Echo pin. This duration is directly proportional to the measured distance: distance[cm] = echoDuration[us] / 58. The distances of the 6 sensors are stored in the variable usDistance before being sent to the Raspberry by the CAN bus. 
-	* Distance range : [4cm - 535cm]
-	* Maximum echo duration: 31ms
+The car is equipped with 6 ultrasonic sensors. To measure a distance, we send a 10us signal on the Trigger pin of the sensor. In return, the function `HAL_GPIO_EXTI_Callback` (file `main.c`) measures the duration of the signal on the Echo pin. This duration is directly proportional to the measured distance: **distance\[cm] = echoDuration\[us] / 58**. 
+
+The measurements are made one by one, each measurement lasting 40ms. The measurements are updated with a period of 400ms. It can be changed by changing the value of the `PERIOD_UPDATE_US` constant in the `Inc/main.h` file. The distances of the 6 sensors are stored in the variable usDistance before being sent to the Raspberry by the CAN bus. 
+
+* Distance range : \[4cm - 535cm]
+* Maximum echo duration: 31ms
 
 
 ## How to use the CAN bus
@@ -117,7 +138,7 @@ Voltage measurements are continuously updated by the ADC, so there is no schedul
 The motor consigns and the actuators are updated each time a CAN message (corresponding to the CAN_ID_MOTORS_CMD) is received. The maximum response time to react to a command is approximatively egals to the time transmission of the CAN MCM message, plus the period of the update loop.
 
 ### Sending data sensors
-	* Motors data (left rear and right rear odometry, left rear and right rear speeds, steering angle) are periodically send with a period egals to 100ms. It can be changed by changing the value of the `PERIOD_SEND_MOTORS` constant in the `Inc/main.h` file.
-	* The data from the ultrasonic sensors are sent each time the 6 sensors have completed their measurement. The measurements are made one by one, each measurement lasting 40ms. The measurements are updated with a period of 400ms. It can be changed by changing the value of the `PERIOD_UPDATE_US` constant in the `Inc/main.h` file.
-	* The battery level is periodically send with a period egals to 30s. It can be changed by changing the value of the `PERIOD_SEND_BATT` constant in the `Inc/main.h` file.
+* Motors data (left rear and right rear odometry, left rear and right rear speeds, steering angle) are periodically send with a period egals to 100ms. It can be changed by changing the value of the `PERIOD_SEND_MOTORS` constant in the `Inc/main.h` file.
+* The data from the ultrasonic sensors are sent each time the 6 sensors have completed their measurement. 
+* The battery level is periodically send with a period egals to 30s. It can be changed by changing the value of the `PERIOD_SEND_BATT` constant in the `Inc/main.h` file.
 
