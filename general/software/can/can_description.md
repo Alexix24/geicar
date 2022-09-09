@@ -75,11 +75,11 @@ Values between 0% and 100%.
 
 * **LeftRear: Left rear motor command**
 		This byte is used to control the speed of the left rear motor. The value 0 is the maximum speed backwards. The value 50 stops the motor. The value 100 is the maximum value forward.
-		*value between 0% and 100%.
+		
 
 * **RightRear: Right rear motor command**
 		This byte is used to control the speed of the right rear motor. The value 0 is the maximum speed backwards. The value 50 stops the motor. The value 100 is the maximum value forward.
-		*value between 0% and 100%.
+		
 
 * **Steering: Steering motor command**
 		This byte is used to control the speed of the steering motor. The value 0 is the maximum speed right. The value 50 stops the motor. The value 100 is the maximum speed left.
@@ -242,6 +242,29 @@ Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a dis
 
 * **Battery level : Raw data from the battery sensor**\
 The value is between 0 and 0xFFF. The battery level U(V) can be computed by U = batMes * (11.65/2794.0). The nominal operation of the battery has to be between 11 and 14 V.**
+
+
+### Calibration Mode
+
+* **From:** NucleoF103 / Raspberry
+* **To:** Raspberry / NucleoF103
+* **Lenght (Bytes):** 2
+* **ID:** 0x300
+* **Data field:**
+
+|Byte 0| Byte 1|
+|:------|:------|
+|CalibrationStatus| UserNeed|
+
+* **CalibrationStatus : Status of the calibration**
+	* 0x1 -> Calibration request
+	* 0x2 -> Calibration in progress
+	* 0x3 -> Calibration success
+	* 0x4 -> Calibration failure
+	
+* **UserNeed : Indicates if user intervention is required**
+	* 0x0 -> No user intervention required
+	* 0x1 -> User intervention required
 
 
 ## IDs of the CAN Messages
