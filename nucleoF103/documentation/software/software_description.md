@@ -142,3 +142,22 @@ The motor consigns and the actuators are updated each time a CAN message (corres
 * The data from the ultrasonic sensors are sent each time the 6 sensors have completed their measurement. 
 * The battery level is periodically send with a period egals to 30s. It can be changed by changing the value of the `PERIOD_SEND_BATT` constant in the `Inc/main.h` file.
 
+## Steering calibration
+The steering limit switches are not symmetrical to the center of the steering. Therefore, the steering is calibrated to stop before the farthest switch from the center, in order to have a symmetrical steering on the left and on the right.\
+The value of the angle (between 0 and 200) is given by : `angle = a * steering_sensor + b`\
+The coefficients a and b are calculated by the `calibrate` function, available in the file 'calibrate.c'. These coefficients are stored in flash memory.\
+The calibration procedure communicates with the Raspberry through the CAN bus.
+
+**Two possibilities to start the calibration procedure:** 
+After starting the ROS nodes on the Raspberry (see [how_to_use.md](../../../general/how_to_use.md), step n°3), it is possible to launch the calibration:
+* from the Xbox controller ("DPAD bottom" + "Start")
+* from a terminal on the Raspberry, by running:
+```sh
+ros2 service call /steering_calibration std_srvs/srv/Empty 
+```
+
+**Detail of the procedure :**
+1. Full left steering
+2. Full right steering
+3. **User intervention:** manually center the steering wheels (using the L/R buttons). When the steering is centered, press the blue button on the NucleoF103 board (this is indicated in the ROS launch terminal on the Raspberry)
+4. Compute steering coefficients (a and b) and write to flash memory
