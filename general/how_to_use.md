@@ -9,6 +9,7 @@
 
 **All the system is now powered**
 
+
 ### 2.Connection to the Raspberry PI
 By default, the raspberry pi board connects to the IoT network at startup. 
 
@@ -25,6 +26,7 @@ ssh pi@10.105.1.XX
 
 **You are now in the raspberry environment**
 
+
 ### 3.Starting the ROS nodes (in the Raspberry PI board)
 Start all necessary nodes :
 ```sh
@@ -35,18 +37,20 @@ You can see in this launch terminal the startup and the indications of the diffe
 
 **The nodes on the raspberry are now started. You can control the car with the XBOX controller**
 
+
 ### 4.Connection to the Jetson Nano
 You can access the Jetson Nano card from the Raspberry. You have to establish a first ssh connection between the pc and the raspberry (step n°2), then establish the ssh connection between the raspberry and the jetson.
 
 In another terminal :
 1. Repeat step n°2 to connect to the raspberry again (you can check that you are in a Raspberry Pi terminal with the prompt, which indicates "pi@geicar")
-2. From the raspberryPi terminal (with prompt "pi@geicar"), you can connect to the jetson nano card :
+2. From the raspberryPi terminal (with prompt "pi@geicar"), you can connect to the jetson nano board :
 ```sh
 ssh jetson@192.168.1.10
 ```
 3. Enter the password : "geicar" 
 
 **The prompt is now "jetson@geicar"**
+
 
 ### 5.Starting the ROS nodes (in the Jetson Nano board)
 Once you are connected to the Jetson Nano (prompt jetson@geicar) :
@@ -64,6 +68,7 @@ ros2 launch geicar_start_jetson geicar.jetson.launch.py
 ```
 
 **You can now see that the LIDAR is running and the camera is on**
+
 
 ### 6.Stop the nodes and turn OFF the car
 1. Stop the nodes by pressing "Ctrl-C" in the launch terminals (in the Raspberry and in the Jetson)
