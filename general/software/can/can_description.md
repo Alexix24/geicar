@@ -241,7 +241,7 @@ Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a dis
 |Battery Level |
 
 * **Battery level : Raw data from the battery sensor**\
-The value is between 0 and 0xFFF. The battery level U(V) can be computed by U = batMes * (11.65/2794.0). The nominal operation of the battery has to be between 11 and 14 V.**
+The value is between 0 and 0xFFF. The battery level U(V) can be computed by U = batMes * (11.65/2794.0). The nominal operation of the battery has to be between 11 and 14 V.
 
 
 ### Calibration Mode
