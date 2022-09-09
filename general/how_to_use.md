@@ -1,6 +1,66 @@
-# This file describes the main steps to use the car
+# This file describes the main steps to use the geicar
 
-## Connection to the car and start of the ROS Nodes
+# Contents
+1. **Quick start guide**
+
+2. **Detailed manual**
+*  1. Connection to the car and start of the ROS Nodes
+*  2. How to drive the car in manual mode (with the XBOX Controller)
+*  3. ROS2 tips
+
+# 1. Quick start guide
+This part describes how to start the car, how to drive in Manual mode with the joystick, and how to switch to the Autonomous Mode
+
+1. Power ON the car 
+
+2. Connect to the raspberry pi (you need to be on the same network, i.e the IoT network by default):\
+**Adapt the IP address according to the car, password : geicar**
+```sh
+ssh pi@10.105.1.XX
+```
+
+3. Start raspberry ROS2 nodes :
+```sh
+ros2 launch geicar_start geicar.launch.py
+```
+**The car is ready to be used in manual mode**
+
+4. _**Optional, but recommanded on first use** You can start the steering calibration by pressing "DPAD Bottom" + "START". Then follow the instructions given in the launch terminal (ros2 launch) on the Raspberry._ (see [nucleoF103_software](../nucleoF103/documentation/software/software_description.md) for more details about the calibration)
+
+5.  Drive the car with the XBOX controller :
+    * Press "start" to start the car
+    * Press "LT" to move backward, "RT" to move forward, and control the steering with the left joystick
+    * Press "B" to stop the car
+    * Press "A" to select Autonomous Mode (that do nothing by default), press "Y" to select Manual Mode
+
+6. **Optional** If you want to start the LIDAR and the CAMERA (not used by default):
+      * Open a new terminal, and connect to the raspberry :\
+      **Adapt the IP address according to the car, password : geicar**
+      ```sh
+      ssh pi@10.105.1.XX
+      ```
+      * Connect to the Jetson Nano board :\
+      **password : geicar**
+      ```sh
+      ssh jetson@192.168.1.10
+      ```
+      * Go into the docker container "ros-humble" :\
+      **password : geicar**
+      ```sh
+      sudo docker start -ai ros-humble
+      ```
+      * Start LIDAR and CAMERA nodes:
+      ```sh
+      ros2 launch geicar_start_jetson geicar.jetson.launch.py
+      ```
+      **The LIDAR should be running, and the CAMERA should be ON**
+
+
+
+
+# 2. Detailed manual
+
+## i. Connection to the car and start of the ROS Nodes
 
 ### 1.Powering the car
 1. Plug in the battery
@@ -14,7 +74,7 @@
 By default, the raspberry pi board connects to the IoT network at startup. 
 
 _It is also possible to connect the board to any other network by modifying the file "/etc/netplan/50-cloud-init.yaml". You can edit this file directly from the SD card.
-Sometimes the raspberry can't connect to the IoT network. This may be a problem with the network itself, or it may be that the date/time in the raspberry has drifted too much (there is no RTC). It is therefore advisable to add your own access point (e.g. your phone) to always be able to access the card._
+Sometimes the raspberry can't connect to the IoT network. This may be a problem with the network itself, or it may be that the date/time in the raspberry has drifted too much (there is no RTC). It is therefore advisable to add your own access point (e.g. your phone) to always be able to access the board._
 
 1. Connect your pc to the same network as the raspberry (by default the IoT network)
 2. Connect to the raspberryPi via ssh **(adapt the IP address according to the car and the network used)** : 
@@ -24,7 +84,7 @@ ssh pi@10.105.1.XX
 
 3. Enter the password : "geicar"
 
-**You are now in the raspberry environment**
+**You are now in the raspberry environment : the prompt is now "pi@geicar"**
 
 
 ### 3.Starting the ROS nodes (in the Raspberry PI board)
@@ -39,7 +99,7 @@ You can see in this launch terminal the startup and the indications of the diffe
 
 
 ### 4.Connection to the Jetson Nano
-You can access the Jetson Nano card from the Raspberry. You have to establish a first ssh connection between the pc and the raspberry (step n°2), then establish the ssh connection between the raspberry and the jetson.
+You can access the Jetson Nano board from the Raspberry. You have to establish a first ssh connection between the pc and the raspberry (step n°2), then establish the ssh connection between the raspberry and the jetson.
 
 In another terminal :
 1. Repeat step n°2 to connect to the raspberry again (you can check that you are in a Raspberry Pi terminal with the prompt, which indicates "pi@geicar")
@@ -79,7 +139,7 @@ exit
 3. Turn OFF the car by pressing the ON/OFF red button on the car
 
 
-## Drive the car in manual mode (with the XBOX Controller)
+## ii. How to drive the car in manual mode (with the XBOX Controller)
 Once you have started the nodes in the Raspberry PI (step n°3), you can drive the car with the joystick in Manual Mode **(make sure the car can move safely)** :
 
 1. Power ON the joystick
@@ -89,15 +149,17 @@ Once you have started the nodes in the Raspberry PI (step n°3), you can drive t
 5. Control the car with LT, RT, and the left joystick
 6. Press "B" to stop the car
 
-## See all messages exchanged by ROS nodes (including sensors data)
+## iii. ROS2 tips
+
+### See all messages exchanged by ROS nodes (including sensors data)
 Once you have started the nodes (step n°3 and/or step n°5), you can see the different topics and messages published
 
 In a Raspberry Pi terminal or in a Jetson Nano terminal :
-1. You can see see all the topics (sometimes you need to run this command twice) :
+1. You can see the list of all the topics (sometimes you need to run this command twice) :
 ```sh
 ros2 topic list
 ```
-3. You can display the messages published in the topic :
+2. You can display the messages published in the topic :
 ```sh
 ros2 topic echo 'NAME_OF_THE_TOPIC'
 ```
