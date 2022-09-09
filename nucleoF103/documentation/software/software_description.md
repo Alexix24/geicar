@@ -1,6 +1,13 @@
 # Overview of the NucleoF103 software architecture
 
-## Pin configuration
+## Contents
+1. Pin configuration
+2. How to manage sensors and actuators
+3. How to use the CAN bus
+4. Scheduling
+5. Steering calibration
+
+## 1. Pin configuration
 
 The Nucleo board controls the vehicle's engines and steering, the ultrasonic sensors and the battery level. The full description of the port configuration is provided in the file [nucleoF103_hardware_interface](../hardware/nucleoF103_hardware_interface.pdf)
 
@@ -74,7 +81,7 @@ The Nucleo board controls the vehicle's engines and steering, the ultrasonic sen
 | PA12 | AF Output PP  | CAN TX | CN TX bus                   |
 
 
-## How to manage sensors and actuators
+## 2. How to manage sensors and actuators
 
 ### Bootstrap power
 
@@ -120,13 +127,13 @@ The measurements are made one by one, each measurement lasting 40ms. The measure
 * Maximum echo duration: 31ms
 
 
-## How to use the CAN bus
+## 3. How to use the CAN bus
 
 Sending a message on the CAN bus is done by calling the function `void CAN_Send (unint8_t* data, unint32_t id)`. 
 
 The reception of a message is done in the callback function of the CAN interruption `HAL_CAN_RxCpltCallback` in file `can.c`. Motor controls (wheel and steering) are shared via global variables (leftRearSpeed, rightRearSpeed, steeringSpeed). These variables are updated on receipt of the CAN message. The actuators are updated periodically in the main file.
 
-## Scheduling
+## 4. Scheduling
 
 ### Motor speed
 The speed is calculated under interruption at each edge of the coder of each wheel. The clock used to calculate the speed is the timer TIM2 for the left wheel and TIM4 for the right wheel. This timer is reset at each interruption and give directly the speed. if the car does not move then the speed is set to zero after 100ms.
@@ -142,7 +149,7 @@ The motor consigns and the actuators are updated each time a CAN message (corres
 * The data from the ultrasonic sensors are sent each time the 6 sensors have completed their measurement. 
 * The battery level is periodically send with a period egals to 30s. It can be changed by changing the value of the `PERIOD_SEND_BATT` constant in the `Inc/main.h` file.
 
-## Steering calibration
+## 5. Steering calibration
 The steering limit switches are not symmetrical to the center of the steering. Therefore, the steering is calibrated to stop before the farthest switch from the center, in order to have a symmetrical steering on the left and on the right.\
 The value of the angle (between 0 and 200) is given by : `angle = a * steering_sensor + b`\
 The coefficients a and b are calculated by the `calibrate` function, available in the file 'calibrate.c'. These coefficients are stored in flash memory.\
