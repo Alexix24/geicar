@@ -123,6 +123,32 @@ sudo reboot
 ping 192.168.1.10
 ```
 
+## Share Internet connection from wlan0 to eth0 (to give internet access to the Jetson)
+
+1. Enable ip forwarding :
+```sh
+sudo sysctl -w net.ipv4.ip_forward=1
+```
+
+2. Configure iptables :
+```sh
+sudo iptables -A FORWARD --in-interface wlan0 -j ACCEPT
+sudo iptables --table nat -A POSTROUTING --out-interface eth0 -j MASQUERADE
+ ```
+ 
+3. In the file "/etc/ufw/sysctl.conf", comment out the line net.ipv4.ip_forward=1.
+
+4. In the file "/etc/default/ufw", change the corresponding line to : DEFAULT_FORWARD_POLICY="ACCEPT"
+
+5. Copy the file /geicar/RaspberryPI3/configuration_files/before.rules" to "/etc/ufw/before.rules"
+
+6. Run :
+```sh
+sudo systemctl restart
+sudo ufw enable
+sudo reboot
+```
+
 ## Change Login and Hostname (by "pi" and "geicar")
 This procedure is extracted from "https://www.hepeng.me/changing-username-and-hostname-on-ubuntu/"
 
