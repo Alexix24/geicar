@@ -120,7 +120,14 @@ sudo apt-get install v4l-utils
 4. Install ros-humble-usb-cam package :\
 Source : "https://github.com/ros-drivers/usb_cam/tree/ros2"
 ```sh
-sudo apt-get install ros-humble-usb-cam 
+cd ~/ros2_ws/src
+git clone --branch ros2 https://github.com/ros-drivers/usb_cam.git
+cd ~/ros2_ws
+sudo apt install -y python3-rosdep
+sudo rosdep init
+rosdep update
+rosdep install --from-paths src --ignore-src -y
+colcon build
 source /opt/ros/humble/setup.bash
 source ~/ros2_ws/install/local_setup.bash
 ```
