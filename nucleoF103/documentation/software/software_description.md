@@ -169,5 +169,5 @@ ros2 service call /steering_calibration std_srvs/srv/Empty
 3. **User intervention:** manually center the steering wheels (using the L/R buttons). When the steering is centered, press the blue button on the NucleoF103 board (this is indicated in the ROS launch terminal on the Raspberry)
 4. Compute steering coefficients (a and b) and write to flash memory
 
-### Communication checking
+### 6. Communication checking
 When a communication check request frame is received (from CAN bus), a response (ACK) is sent to the Raspberry indicating that the F103 board and the communication are working
