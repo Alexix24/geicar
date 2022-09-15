@@ -25,7 +25,7 @@ ssh pi@10.105.1.XX
 ros2 launch geicar_start geicar.launch.py
 ```
 Information about the nodes will be displayed, as well as a report describing the status of the system. \
-As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the Lidar)** (see ..... for more details about the system report)\
+As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the lidar)** (see ..... for more details about the system report)
 
 **The car is ready to be used in manual mode**
 
@@ -155,6 +155,7 @@ Once you have started the nodes in the Raspberry PI (step n°3), you can drive t
 4. You can select the mode : button "Y" for Manual (by default at startup), button "A" for Autonomous
 5. Control the car with LT, RT, and the left joystick
 6. Press "B" to stop the car
+
 
 ## iii. ROS2 tips
 
