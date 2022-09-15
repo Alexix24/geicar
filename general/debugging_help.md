@@ -1,9 +1,9 @@
 
 # This file describes possible problems encountered and how to try to solve them
 
-## 1. Errors on the system_check report (when launching raspberry nodes)
+## I. Errors on the system_check report (when launching raspberry nodes)
 
-### Communications status errors
+### 1. Communications status errors
 A FAILED communication status indicates that the raspberry cannot communicate with the corresponding board.
 
 **Nucleos FAILED** (possible reasons) :
@@ -17,25 +17,26 @@ Possible reasons are :
 * the ROS_ID of the Jetson is not the same as the Raspberry's ROS_ID (see ~/.bashrc, line "export ROS_DOMAIN_ID=XX")
 * the ethernet communication does not work 
 
-### Sensors status errors
+### 2. Sensors status errors
 
-**Ultrasonics sensors**
+* **Ultrasonics sensors**
+
 **If all ultrasonic sensors indicate an "out of range" error message, just restart the car.**
 
 1. "Out of range" error : the corresponding sensor returns an inconsistent value. Check the correct functioning of the sensor
 2. "No data received" error : if the communication with the nucleoF103 works, then this problem is unknown
 
-**GPS**
+* **GPS**
 1. "No fix" error : this indicates that the **GPS is working**, but **has not yet found a position**
 2. "No data received" error : if the communication with the nucleoL476 works, then the GPS is not connected or not working
 3. "Autonomous GNSS fix" warning : this indicates that the **GPS is working**, and that it has found a position **without receiving a correction from the base**
 4. "Differential GNSS fix" warning : this indicates that the **GPS is working**, and that it has found a position **without receiving a correction from the base**
 
-**IMU**
+* **IMU**
 "No data received" error : if the communication with the nucleoL476 works, then the IMU is not connected or not working
 
-**LIDAR**
+* **LIDAR**
 "No data received" error : if the communication with the Jetson works, then the LIDAR is not connected or not working
 
-**CAMERA**
+* **CAMERA**
 "No data received" error : if the communication with the Jetson works, then the CAMERA is not connected or not working
