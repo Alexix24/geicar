@@ -1,9 +1,20 @@
 ### This file describes the steps to configure the Raspberry PI, from the OS to the ROS installation
 
+### 1. Raspberry configuration from the SD card image
 **An image of the SD card with all the necessary configurations and the initial ROS nodes is available here : .....**
 
+1. Flash the image on your SD Card (you can use etcher)
+2. Insert the SD card in the Raspberry and Power ON the board (login = pi, password = geicar)
 
+3. Two changes are necessary to complete the configuration:
+* In the file /etc/dhcp/dhcpd.conf, replace the MAC address assigned to the address 192.168.1.10 by the MAC address of the Jetson board that will be used (interface eth0)
+* In the file ~/.bashrc, change the line "export ROS_DOMAIN_ID = 1" by "export ROS_DOMAIN_ID = XX", with XX is the car number (exemple : XX=1 for the car n°1)
 
+4. Reboot the board
+
+**The RaspberryPi is ready**
+
+### 2.Raspberry configuration from an empty SD card
 ## OS Installation
 1. Download Ubuntu 22.04 Server for arm64 : https://ubuntu.com/download/server/arm
 2. Flash the image on your SD Card (you can use etcher)
