@@ -18,11 +18,15 @@ This part describes how to start the car, how to drive in Manual mode with the j
 ```sh
 ssh pi@10.105.1.XX
 ```
+*If you have problems connecting to the Raspberry, please refer to the detailed manual, section 2.i.b)*
 
 3. Start raspberry ROS2 nodes :
 ```sh
 ros2 launch geicar_start geicar.launch.py
 ```
+Information about the nodes will be displayed, as well as a report describing the status of the system. \
+As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the Lidar)** (see ..... for more details about the system report)\
+
 **The car is ready to be used in manual mode**
 
 4. _**Optional, but recommanded on first use** You can start the steering calibration by pressing "DPAD Bottom" + "START". Then follow the instructions given in the launch terminal (ros2 launch) on the Raspberry._ (see [nucleoF103_software](../nucleoF103/documentation/software/software_description.md) for more details about the calibration)
@@ -53,7 +57,9 @@ ros2 launch geicar_start geicar.launch.py
       ```sh
       ros2 launch geicar_start_jetson geicar.jetson.launch.py
       ```
-      **The LIDAR should be running, and the CAMERA should be ON**
+**The LIDAR should be running, and the CAMERA should be ON**\
+You can check that everything is working by pressing the "DPAD Left" button on the joystick. This displays a system report on the           launch terminal (on the raspberry) (see ..... for more details about the system report)
+
 
 
 
@@ -62,7 +68,7 @@ ros2 launch geicar_start geicar.launch.py
 
 ## i. Connection to the car and start of the ROS Nodes
 
-### 1.Powering the car
+### a)Powering the car
 1. Plug in the battery
 2. Press the ON/OFF red button
 3. Press the "start" red button 
@@ -70,7 +76,7 @@ ros2 launch geicar_start geicar.launch.py
 **All the system is now powered**
 
 
-### 2.Connection to the Raspberry PI
+### b)Connection to the Raspberry PI
 By default, the raspberry pi board connects to the IoT network at startup. 
 
 _It is also possible to connect the board to any other network by modifying the file "/etc/netplan/50-cloud-init.yaml". You can edit this file directly from the SD card.
@@ -87,18 +93,19 @@ ssh pi@10.105.1.XX
 **You are now in the raspberry environment : the prompt is now "pi@geicar"**
 
 
-### 3.Starting the ROS nodes (in the Raspberry PI board)
+### c)Starting the ROS nodes (in the Raspberry PI board)
 Start all necessary nodes :
 ```sh
 ros2 launch geicar_start geicar.launch.py
 ```
 
-You can see in this launch terminal the startup and the indications of the different nodes. 
+Information about the nodes will be displayed, as well as a report describing the status of the system. \
+As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the Lidar)** (see ..... for more details about the system report)\
 
 **The nodes on the raspberry are now started. You can control the car with the XBOX controller**
 
 
-### 4.Connection to the Jetson Nano
+### d)Connection to the Jetson Nano
 You can access the Jetson Nano board from the Raspberry. You have to establish a first ssh connection between the pc and the raspberry (step n°2), then establish the ssh connection between the raspberry and the jetson.
 
 In another terminal :
@@ -112,7 +119,7 @@ ssh jetson@192.168.1.10
 **The prompt is now "jetson@geicar"**
 
 
-### 5.Starting the ROS nodes (in the Jetson Nano board)
+### e)Starting the ROS nodes (in the Jetson Nano board)
 Once you are connected to the Jetson Nano (prompt jetson@geicar) :
 
 1. Start and go into the docker container "ros-humble" (password : "geicar") : 
@@ -130,7 +137,7 @@ ros2 launch geicar_start_jetson geicar.jetson.launch.py
 **You can now see that the LIDAR is running and the camera is on**
 
 
-### 6.Stop the nodes and turn OFF the car
+### f)Stop the nodes and turn OFF the car
 1. Stop the nodes by pressing "Ctrl-C" in the launch terminals (in the Raspberry and in the Jetson)
 2. Exit ssh connections :
 ```sh
