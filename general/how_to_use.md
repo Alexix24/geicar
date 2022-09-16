@@ -182,3 +182,24 @@ For example :
 ros2 topic echo /us_data
 ```
 
+### Visualize the lidar and the camera in rviz2
+It is difficult to launch rviz2 through an ssh connection (too slow). However, you can **connect to the Jetson via HDMI to launch rviz2**.
+
+1. **rviz2 is installed on the jetson (not in the docker container!)**. To launch it, simply run :
+```sh
+rviz2
+```
+
+2. Then start the ROS nodes of the jetson (in the docker):
+```sh
+sudo docker start -ai ros-humble
+ros2 launch geicar_start_jetson geicar.jetson.launch.py
+```
+
+3. In rviz2, to vizualize the lidar scan:
+      - Click on "Add" -> "by topic" -> "/scan"
+      - In "global options", put "laser" in the field "Fixed Frame".
+
+4. In rviz2, to visualize the camera image:
+      - In " global options ", put "base_link" in the field "Fixed Frame", and "10" in "Frame Rate" (or corresponding frame rate)
+      - Click on "add" -> "by topic", and select the topic "/image_raw" (image)
