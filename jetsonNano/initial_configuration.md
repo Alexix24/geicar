@@ -1,4 +1,4 @@
-### This file describes the steps to configure the Jetson Nano board, from the OS to the ROS installation
+# This file describes the steps to configure the Jetson Nano board, from the OS to the ROS installation
 
 ## 1. Jetson configuration from the SD card image
 **An image of the SD card with all the necessary configurations and the initial ROS nodes is available here : .....**
