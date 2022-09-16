@@ -1,6 +1,6 @@
-### This file describes the steps to configure the Raspberry PI, from the OS to the ROS installation
+# This file describes the steps to configure the Raspberry PI, from the OS to the ROS installation
 
-### 1. Raspberry configuration from the SD card image
+## 1. Raspberry configuration from the SD card image
 **An image of the SD card with all the necessary configurations and the initial ROS nodes is available here : .....**
 
 1. Flash the image on your SD Card (you can use etcher)
@@ -14,16 +14,16 @@
 
 **The RaspberryPi is ready**
 
-### 2.Raspberry configuration from an empty SD card
-## OS Installation
+## 2.Raspberry configuration from an empty SD card
+### OS Installation
 1. Download Ubuntu 22.04 Server for arm64 : https://ubuntu.com/download/server/arm
 2. Flash the image on your SD Card (you can use etcher)
 3. Insert the SD card in the Raspberry and Power ON the board
 
-## Keyboard configuration
+### Keyboard configuration
 Change the keyboard layout in /etc/default/keyboard. Then reboot.
 
-## Network configuration - Wifi
+### Network configuration - Wifi
 This procedure is extracted from "https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#4-boot-ubuntu-server"
 
 1. Copy the file "/geicar/RaspberryPI3/configuration_files/50-cloud-init.yaml" to "/etc/netplan/50-cloud-init.yaml". **Adapt SSID and password if necessary**
@@ -42,7 +42,7 @@ To select a wifi network :
 sudo wpa_cli -i wlan0 select_network <network_id>
 ```
 
-## Updates and tools installations
+### Updates and tools installations
 1. General update :
 ```sh
 sudo apt update
@@ -71,7 +71,7 @@ sudo apt install can-utils
 sudo apt install nano
 ```
 
-## Firewall configuration
+### Firewall configuration
 1. Allow all ssh connections :
 ```sh
 sudo ufw allow ssh
@@ -90,7 +90,7 @@ sudo ufw allow in proto udp from 224.0.0.0/4
 sudo ufw allow from 192.168.1.10
 ```
 
-## CAN configuration - PiCan2
+### CAN configuration - PiCan2
 
 1. Copy the file "/geicar/RaspberryPI3/configuration_files/config.txt" to "/boot/firmware/config.txt"
 
@@ -106,7 +106,7 @@ After reboot, check that the service has started correctly :
 sudo systemctl status pican2
 ```
 
-## Installation of dhcp server (for ethernet)
+### Installation of dhcp server (for ethernet)
 This procedure is extracted from "https://www.linuxfordevices.com/tutorials/ubuntu/dhcp-server-on-ubuntu"
 
 1. Install isc-dhcp-server :
@@ -134,7 +134,7 @@ sudo reboot
 ping 192.168.1.10
 ```
 
-## Share Internet connection from wlan0 to eth0 (to give internet access to the Jetson)
+### Share Internet connection from wlan0 to eth0 (to give internet access to the Jetson)
 
 1. Enable ip forwarding :
 ```sh
@@ -160,7 +160,7 @@ sudo ufw enable
 sudo reboot
 ```
 
-## Change Login and Hostname (by "pi" and "geicar")
+### Change Login and Hostname (by "pi" and "geicar")
 This procedure is extracted from "https://www.hepeng.me/changing-username-and-hostname-on-ubuntu/"
 
 **LOGIN : pi**
@@ -202,7 +202,7 @@ sudo reboot
 ```
 
 
-## Installation of ROS2 Humble
+### Installation of ROS2 Humble
 1. Follow the installation procedure of ROS2 humble available here : "https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html"
 
 2. Install rqt package :
