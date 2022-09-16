@@ -163,9 +163,9 @@ Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a dis
 |:------|:------|:------|:------|
 |x axis | Y axis | Z axis| Sign|
 
-* **X axis: Magnetic field measured on the x axis in microtesla (µT)**
-* **Y axis: Magnetic field measured on the y axis in microtesla (µT)**
-* **Z axis: Magnetic field measured on the z axis in microtesla (µT)**
+* **X axis: Magnetic field measured on the x axis in milli Gauss (mG)**
+* **Y axis: Magnetic field measured on the y axis in milli Gauss (mG)**
+* **Z axis: Magnetic field measured on the z axis in milli Gauss (mG)**
 * **Sign :** 
 	* bit 0: sign of the z axis value (0 : positive ; 1 : negative)
 	* bit 1 : sign of the y axis value (0 : positive ; 1 : negative)
@@ -183,9 +183,9 @@ Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a dis
 |:------|:------|:------|:------|
 |x axis | Y axis | Z axis| Sign|
 
-* **X axis: Angular velocity measured on the x axis in rad/s**
-* **Y axis: Angular velocity measured on the y axis in rad/s**
-* **Z axis: Angular velocity measured on the z axis in rad/s**
+* **X axis: Angular velocity measured on the x axis in milli degree per seconde (mdps)**
+* **Y axis: Angular velocity measured on the y axis in milli degree per seconde (mdps)**
+* **Z axis: Angular velocity measured on the z axis in milli degree per seconde (mdps)**
 * **Sign :** 
 	* bit 0 : sign of the z axis value (0 : positive ; 1 : negative)
 	* bit 1 : sign of the y axis value (0 : positive ; 1 : negative)
@@ -203,9 +203,9 @@ Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a dis
 |:------|:------|:------|:------|
 |x axis | Y axis | Z axis| Sign|
 
-* **X axis: Linear acceleration measured on the x axis in m/s²**
-* **Y axis: Linear acceleration measured on the y axis in m/s²**
-* **Z axis: Linear acceleration measured on the z axis in m/s²**
+* **X axis: Linear acceleration measured on the x axis in milli g (mg)**
+* **Y axis: Linear acceleration measured on the y axis in milli g (mg)**
+* **Z axis: Linear acceleration measured on the z axis in milli g (mg)**
 * **Sign :** 
 	* bit 0 : sign of the z axis value (0 : positive ; 1 : negative)
 	* bit 1 : sign of the y axis value (0 : positive ; 1 : negative)
@@ -224,9 +224,75 @@ Ultrasonic distances are between 0cm and 536cm. **A value of 536 indicates a dis
 |:------|:------|:------|
 |Temperature | Pressure | Humidity|
 
-* **Temperature: Temperature measured in *10 °C**
+* **Temperature: Temperature measured in \*10 °C**
 * **Pressure: Pressure measured in hPa**
 * **Humidity: Humidity measured %**
+
+### GPS latitude (GPS1)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 8
+* **ID:** 0x272
+* **Data field:**
+
+|Byte 0-7|
+|:------|
+|Latitude |
+
+* **Latitude : Raw data from the GPS [decimal degree]**
+
+### GPS longitude (GPS2)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 8
+* **ID:** 0x282
+* **Data field:**
+
+|Byte 0-7|
+|:------|
+|Longitude |
+
+* **Longitude : Raw data from the GPS [decimal degree]**
+
+### GPS altitude (GPS3)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 8
+* **ID:** 0x292
+* **Data field:**
+
+|Byte 0-7|
+|:------|
+|Altitude |
+
+* **Altitude : Raw data from the GPS [meters]**
+
+### GPS Status (GPS4)
+
+* **From:** NucleoL476
+* **To:** Raspberry
+* **Lenght (Bytes):** 7
+* **ID:** 0x302
+* **Data field:**
+
+|Byte 0|Byte 1-3|Byte 4-6|
+|:------|:------|:------|
+|Quality | hAcc | vAcc|
+
+* **Quality : GPS fix status**
+  - 0 = No fix
+  - 1 = Autonomous GNSS fix
+  - 2 = Differential GNSS fix
+  - 4 = RTK Fixed
+  - 5 = RTK Float
+  - 6 = Estimated/dead reckoning fix
+
+* **hAcc : Estimated horizontal accuracy [mm]**
+* **vAcc : Estimated vertical accuracy [mm]**
+
 
 ### Battery Level
 
@@ -249,7 +315,7 @@ The value is between 0 and 0xFFF. The battery level U(V) can be computed by U = 
 * **From:** NucleoF103 / Raspberry
 * **To:** Raspberry / NucleoF103
 * **Lenght (Bytes):** 2
-* **ID:** 0x300
+* **ID:** 0x400
 * **Data field:**
 
 |Byte 0| Byte 1|
@@ -265,6 +331,26 @@ The value is between 0 and 0xFFF. The battery level U(V) can be computed by U = 
 * **UserNeed : Indicates if user intervention is required**
 	* 0x0 -> No user intervention required
 	* 0x1 -> User intervention required
+
+
+### Communication check
+
+* **From:** NucleoF103 / NucleoL476 / Raspberry
+* **To:** Raspberry / NucleoF103 / NucleoL476
+* **Lenght (Bytes):** 2
+* **ID:** 0x410
+* **Data field:**
+
+|Byte 0| Byte 1|
+|:------|:------|
+|Request| Response|
+
+* **Request :**
+	* 0x1 -> Communication request : from Raspberry
+	
+* **Response :**
+	* 0x1 -> NucleoF103 ACK
+	* 0x2 -> NucleoL476 ACK
 
 
 ## IDs of the CAN Messages
@@ -284,4 +370,6 @@ The value is between 0 and 0xFFF. The battery level U(V) can be computed by U = 
 |GPS1 : Latitude	     |0x2      |0x7        |0x2      |0x272 |
 |GPS2 : Longitude	     |0x2      |0x8        |0x2      |0x282 |
 |GPS3 : Altitude	     |0x2      |0x9        |0x2      |0x292 |
-|Calibration Mode	     |0x3      |0x0        |0x0      |0x300 |
+|GPS4 : Status		     |0x3      |0x0        |0x2      |0x302 |
+|Calibration Mode	     |0x4      |0x0        |0x0      |0x400 |
+|Communication check	     |0x4      |0x1        |0x0      |0x410 |
