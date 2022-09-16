@@ -25,9 +25,20 @@ All sensors are accessed via I2C. Available sensors are
 
 File iks01a2.c/h serve as top level API for accessing sensors
 
-## GPS RTK [Simple RTK2B]
+## GPS RTK [Simple RTK2B - ZED F9P]
 
-GPS is accessed via uart2. The gnss.c file provides the "ProcessNMEALine" function, which interprets the frames received on UART2 from the GPS. This function updates the global variable `gpsCoords` (latitude, longitude, altitude). Latitude and longitude are in decimal degrees, altitude in meters.
+GPS is accessed via uart2.\
+The gnss_nmea_parser.c file provides the "ProcessNMEALine" function, which interprets the NMEA frames received on UART2 from the GPS. This function updates the global variable `gpsCoords` (latitude, longitude, altitude). Latitude and longitude are in decimal degrees, altitude in meters.\
+The gnss_ubx_parser.c file provides the "UBX_Parse_Raw_To_NAV_PVT" function, which interprets the UBX-NAV-PVT frames received on UART2 from the GPS. This function updates the global variable `ubx_nav_pvt_msg` (hacc,vacc,quality) :
+* hacc is the estimated horizontal accuracy 
+* vacc is the estimated vertical accuracy 
+* quality is the fix quality : 
+  - 0 = No fix
+  - 1 = Autonomous GNSS fix
+  - 2 = Differential GNSS fix
+  - 4 = RTK Fixed
+  - 5 = RTK Float
+  - 6 = Estimated/dead reckoning fix
 
 
 ## CAN
