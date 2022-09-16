@@ -13,10 +13,14 @@ find_package(builtin_interfaces REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 set(msg_files
+  "msg/JoystickOrder.msg"
   "msg/MotorsOrder.msg"
   "msg/MotorsFeedback.msg"
   "msg/GeneralData.msg"
   "msg/SteeringCalibration.msg"
+  "msg/Ultrasonic.msg"
+  "msg/Gnss.msg"
+  "msg/SystemCheck.msg"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}

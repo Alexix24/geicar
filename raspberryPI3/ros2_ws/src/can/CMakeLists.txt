@@ -9,13 +9,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(interfaces REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
 add_executable(can_rx_node src/can_rx_node.cpp)
-ament_target_dependencies(can_rx_node rclcpp std_msgs interfaces)
+ament_target_dependencies(can_rx_node rclcpp std_msgs sensor_msgs interfaces)
 
 add_executable(can_tx_node src/can_tx_node.cpp)
 ament_target_dependencies(can_tx_node rclcpp std_msgs interfaces)

@@ -1,32 +1,22 @@
 #include "../include/car_control/steeringCmd.h"
 
-#include <stdint.h>
-#include "math.h"
 
 
-#define STOP 50
-#define MAX_SPEED_LEFT 0
-#define MAX_SPEED_RIGHT 100
+//return the Pwm command to reach the angle passed in argument
+int steeringCmd(float requestedSteerAngle, float currentSteerAngle, uint8_t & steeringPwmCmd){
 
-#define TOLERANCE_ANGLE 3
-
-
-
-//return the speed command to reach the angle passed in argument
-int steeringCmd(uint8_t requestedAngle, uint8_t currentAngle, uint8_t & steeringSpeedCmd){
-
-	int errorAngle = currentAngle - requestedAngle;
+	float errorAngle = currentSteerAngle - requestedSteerAngle;
 
     //Command's calculation
 	if (abs(errorAngle)<TOLERANCE_ANGLE){
-		steeringSpeedCmd = STOP;
+		steeringPwmCmd = STOP;
 	}
 	else {
 		if (errorAngle>0) {
-			steeringSpeedCmd = MAX_SPEED_LEFT;
+			steeringPwmCmd = MAX_PWM_LEFT;
 		}
 		else {
-			steeringSpeedCmd = MAX_SPEED_RIGHT;
+			steeringPwmCmd = MAX_PWM_RIGHT;
 		}
 	}
 

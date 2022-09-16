@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2017 Muhammad Furqan Habibi
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pickle import FALSE, TRUE
 import platform
 import time
 from math import modf
@@ -183,7 +185,7 @@ class JoystickRos2(Node):
         self.joy = Joy()
         self.joy.header = Header()
         self.joy.header.frame_id = ''
-        self.joy.axes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        self.joy.axes = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
         self.joy.buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         # Joy publisher
@@ -210,20 +212,24 @@ class JoystickRos2(Node):
 
     def run(self):
         device_manager = devices
+        printIfNotFound = True 
         while rclpy.ok():
             # get the first joystick
             try:
                 gamepad = device_manager.gamepads[0]
             except IndexError:
-                print('Joystick not found. Will retry every second.')
+                if printIfNotFound:
+                    self.get_logger().warn("Joystick not found. Please connect the joystick.")
+                    printIfNotFound = False
                 time.sleep(1)
                 device_manager.find_devices()
                 continue
 
+            self.get_logger().info("Found joystick : " + gamepad.name);
+            
             # detected joystick is not keymapped yet
-            print("Name : " + gamepad.name);
             if (gamepad.name not in JOYSTICK_CODE_VALUE_MAP):
-                print('Sorry, joystick type not supported yet! Please plug in supported joystick')
+                self.get_logger().warn("Sorry, joystick type not supported yet! Please plug in supported joystick");
                 time.sleep(1)
                 device_manager.find_devices()
                 continue
@@ -237,16 +243,20 @@ class JoystickRos2(Node):
                     continue
 
             # read inputs from joystick
+            printIfNotFound = True
             while True:
                 try:
                     events = gamepad._do_iter()
                 # check unplugged joystick
                 except OSError:
-                    print('Joystick not found. Will retry every second.')
+                    if printIfNotFound:
+                        self.get_logger().warn("Joystick not found. Please connect the joystick.");
+                        printIfNotFound = False
                     time.sleep(1)
                     device_manager.find_devices()
                     break
                 if events:
+                    printIfNotFound = TRUE
                     for event in events:
                         if (event.code in JOYSTICK_CODE_VALUE_MAP[event.device.name][0]):
                             key_code = JOYSTICK_CODE_VALUE_MAP[event.device.name][0][event.code]

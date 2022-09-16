@@ -1,10 +1,19 @@
-#include <cstdint>
-
 #ifndef __steeringCmd_H
 #define __steeringCmd_H
 
+#include <cstdint>
+#include <stdint.h>
+#include "math.h"
 
-int steeringCmd(uint8_t requestedAngle, uint8_t currentAngle, uint8_t & steeringSpeedCmd);
+
+#define STOP 50
+#define MAX_PWM_LEFT 0
+#define MAX_PWM_RIGHT 100
+
+#define TOLERANCE_ANGLE 0.08
+
+
+int steeringCmd(float requestedSteerAngle, float currentSteerAngle, uint8_t & steeringPwmCmd);
 
 
 
