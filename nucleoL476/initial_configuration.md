@@ -8,6 +8,6 @@ Change solder bridges :
 
 ## Software
 
-**Configuration changes are required on the gps (Rover module).** Using the u-center v1 software (https://www.u-blox.com/en/product/u-center), activate the UBX-NAV-PVT frames on uart1:**
+**Configuration changes are required on the gps (Rover module).** Using the u-center v1 software (https://www.u-blox.com/en/product/u-center), activate the UBX-NAV-PVT frames on uart1:
 * CFG-MSGOUT-UBX_NAV_PVT_UART1 = 1 
 * CFG-UART1OUTPROT-UBX = 1
