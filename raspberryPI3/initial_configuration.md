@@ -201,6 +201,9 @@ exit
 sudo reboot
 ```
 
+### Add SWAP Space
+It is useful to add a swap, because the raspberry has only 1GB of RAM, which is not much for compilations. A swap of 2048MB seems to be enough. The procedure to add a swap can be found here : https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04
+
 
 ### Installation of ROS2 Humble
 1. Follow the installation procedure of ROS2 humble available here : "https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html"
