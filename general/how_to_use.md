@@ -25,7 +25,7 @@ ssh pi@10.105.1.XX
 ros2 launch geicar_start geicar.launch.py
 ```
 Information about the nodes will be displayed, as well as a report describing the status of the system. \
-As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the lidar)** (see ..... for more details about the system report)
+As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the lidar)** (see the file [debugging_help](./debugging_help.md) for more details about the system report)
 
 **The car is ready to be used in manual mode**
 
@@ -58,7 +58,7 @@ As the ROS environment on the Jetson has not yet been started, **it is normal fo
       ros2 launch geicar_start_jetson geicar.jetson.launch.py
       ```
 **The LIDAR should be running, and the CAMERA should be ON**\
-You can check that everything is working by pressing the "DPAD Left" button on the joystick. This displays a system report on the           launch terminal (on the raspberry) (see ..... for more details about the system report)
+You can check that everything is working by pressing the "DPAD Left" button on the joystick. This displays a system report on the           launch terminal (on the raspberry) (see the file [debugging_help](./debugging_help.md) for more details about the system report)
 
 
 
@@ -106,7 +106,7 @@ ros2 launch geicar_start geicar.launch.py
 ```
 
 Information about the nodes will be displayed, as well as a report describing the status of the system. \
-As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the Lidar)** (see ..... for more details about the system report)\
+As the ROS environment on the Jetson has not yet been started, **it is normal for the report to display errors concerning the Jetson (including the camera and the Lidar)** (see the file [debugging_help](./debugging_help.md) for more details about the system report)\
 
 **The nodes on the raspberry are now started. You can control the car with the XBOX controller**
 
