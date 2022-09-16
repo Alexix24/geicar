@@ -215,11 +215,7 @@ sudo apt install ~nros-humble-rqt*
 sudo apt install python3-rosdep2
 update rosdep
 ```
-4. Install the Raspberry ROS2 workspace :
-```sh
-cd ~
-git clone **...................**
-```
+4. Install the Raspberry ROS2 workspace : copy the [ros2_ws](./ros2_ws) to ~/ros2_ws 
 
 5. Initialize rosdep dependencies **(in ~/ros2_ws)** :
 ```sh
