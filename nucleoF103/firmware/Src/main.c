@@ -89,6 +89,7 @@ int usEchoStart = 1;
 int usEchoReceived = 0;
 uint64_t usEchoRisingTime = 0;
 uint64_t usEchoDuration=0;
+int currentUs = 0;
 
 uint16_t usTriggerPin[6] = {US_Front_Left_Trig_Pin,US_Front_Center_Trig_Pin,US_Front_Right_Trig_Pin,US_Rear_Left_Trig_Pin,US_Rear_Center_Trig_Pin,US_Rear_Right_Trig_Pin};
 
@@ -303,29 +304,32 @@ int main(void)
     	if (US_FLAG==1)
 		{
 			US_FLAG=0;
-			int i=0;
 
-			while (i<6){
-
-				usEchoStart = 1;
-
-				HAL_GPIO_WritePin( US_GPIO_Port, usTriggerPin[i], GPIO_PIN_SET); //Trigger ON
-				SYS_MicroDelay(10);
-				HAL_GPIO_WritePin( US_GPIO_Port, usTriggerPin[i], GPIO_PIN_RESET); //Trigger OFF
-
-				HAL_Delay(40);	//Waiting to receive the echo
-
-				if (usEchoReceived)	//If we received the echo
-					usDistance[i] = usEchoDuration/58;
-
-				else //If the echo is not received (i.e. sensor failure)
-					usDistance[i] = 1000;	//Set distance value out of range
-
-				usEchoReceived = 0;
-				i+=1;
+			if (currentUs >= 6){
+				currentUs = 0;
 			}
 
-			CAN_SEND_US = 1;
+			usEchoStart = 1;
+
+			HAL_GPIO_WritePin( US_GPIO_Port, usTriggerPin[currentUs], GPIO_PIN_SET); //Trigger ON
+			SYS_MicroDelay(10);
+			HAL_GPIO_WritePin( US_GPIO_Port, usTriggerPin[currentUs], GPIO_PIN_RESET); //Trigger OFF
+
+			HAL_Delay(40);	//Waiting to receive the echo
+
+			if (usEchoReceived)	//If we received the echo
+				usDistance[currentUs] = usEchoDuration/58;
+
+			else //If the echo is not received (i.e. sensor failure)
+				usDistance[currentUs] = 1000;	//Set distance value out of range
+
+			usEchoReceived = 0;
+			currentUs+=1;
+
+			if (currentUs == 6){	//When all the us sensors have been performed, restart with first us sensor (0) and send data to can
+				currentUs = 0;
+				CAN_SEND_US = 1;
+			}
 		}
 
         /* Update motors command*/
