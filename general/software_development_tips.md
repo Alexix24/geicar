@@ -61,3 +61,7 @@ git remote add origin "Link to your team's git repository"
 2. Do the same thing on your PC
 
 3. You can then simply use the "git push", "git pull" commands to transfer the files
+
+## Use visual studio code with docker
+
+If you work with Visual Studio Code and you use a docker container for ROS, you can use the **VS Code extension "docker remote"**, which allows you to access the directories inside the container : press "F1" then "attach to docker container".
