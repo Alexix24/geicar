@@ -2,8 +2,8 @@
 
 ## Programming STM32 Nucleos boards
 
-Nucleo firmwares are developed with "STM32CubeIDE" (https://www.st.com/en/development-tools/stm32cubeide.html). 
-The Nucleo firmwares are available at ........ 
+Nucleo firmwares are developed with "STM32CubeIDE" (https://www.st.com/en/development-tools/stm32cubeide.html). \
+The Nucleo firmwares are available at [F103_Firmware](../nucleoF103/firmware) and [L476_Firmware](../nucleoL476/firmware)
 
 **1. Open a project**
 
