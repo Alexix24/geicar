@@ -1,9 +1,27 @@
 ### This file describes the steps to configure the Jetson Nano board, from the OS to the ROS installation
 
+## 1. Jetson configuration from the SD card image
 **An image of the SD card with all the necessary configurations and the initial ROS nodes is available here : .....**
 
+1. Flash the image on your SD Card (you can use etcher)
+2. Insert the SD card in the Raspberry and Power ON the board (login = pi, password = geicar)
+3. You will then have to change the ROS_ID at the end of the ~/.bashrc file in the docker container, with XX the number of the car (1, 2...): 
+```sh
+sudo docker start -ai ros-humble
+sudo nano ~/.bashrc
+```
+Then change : 
+```sh
+export ROS_DOMAIN_ID = XX
+```
+
+4. Reboot :
+```sh
+sudo reboot
+```
 
 
+## 2. Jetson configuration from an empty SD card
 ## OS Installation
 OS installation instructions for the Nvidia jetson board are available here: "https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit". Follow these instructions with :\
 login = jetson\
@@ -68,37 +86,7 @@ sudo docker pull arm64v8/ros:humble-ros-base
 sudo docker run -it --device=/dev/ttyUSB0 --device=/dev/video0 --net=host --name=ros-humble arm64v8/ros:humble-ros-base 
 ```
 
-## LIDAR configuration **(internet connection required)**
-
-1. Go into the docker container "ros-humble" :
-```sh
-docker start -ai ros-humble
-```
-
-2. Create a ROS2 workspace :
-```sh
-mkdir ~/ros2_ws/
-mkdir ~/ros2_ws/src
-```
-
-3. Install the rplidar_ros2 package :\
-Source : "http://wiki.ros.org/rplidar"
-```sh
-cd ~/ros2_ws/src
-git clone https://github.com/babakhani/rplidar_ros2.git
-cd ..
-colcon build
-source /opt/ros/humble/setup.bash
-source ~/ros2_ws/install/local_setup.bash
-```
-
-4. You can check that the LIDAR is working with :
-```sh
-ros2 launch rplidar_ros rplidar.launch.py
-```
-If the installation was successful, the LIDAR should be running.
-
-## CAMERA configuration **(internet connection required)**
+## Installation of the ros2_ws **(internet connection required)**
 
 1. Install v4l-utils :
 ```sh
@@ -106,22 +94,21 @@ sudo apt-get update
 sudo apt-get install v4l-utils
 ```
 
-2. Go into the docker container ros-humble :
+2. Go into the docker container "ros-humble" :
 ```sh
-sudo docker start -ai ros-humble
+docker start -ai ros-humble
 ```
 
-3. Install v4l-utils :
+3. Copy the [ros2_ws](./ros2_ws) to ~/ros2_ws 
+
+4. Install v4l-utils :
 ```sh
 sudo apt-get update 
 sudo apt-get install v4l-utils
 ```
 
-4. Install ros-humble-usb-cam package :\
-Source : "https://github.com/ros-drivers/usb_cam/tree/ros2"
+5. Install dependencies and source the ROS environment
 ```sh
-cd ~/ros2_ws/src
-git clone --branch ros2 https://github.com/ros-drivers/usb_cam.git
 cd ~/ros2_ws
 sudo apt install -y python3-rosdep
 sudo rosdep init
@@ -132,12 +119,12 @@ source /opt/ros/humble/setup.bash
 source ~/ros2_ws/install/local_setup.bash
 ```
 
-5. You can check that the CAMERA is working with :
+6. You can check the installation with :
 ```sh
-ros2 run usb_cam usb_cam_node_exe
+ros2 launch geicar_start_jetson geicar.jetson.launch.py
 ```
+If the installation was successful, the LIDAR and the CAMERA should be running.
 
-If the installation was successful, the CAMERA should be ON.
 
 ## Source and configure the ROS environment
 
