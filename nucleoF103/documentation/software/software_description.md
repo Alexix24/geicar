@@ -121,7 +121,7 @@ The motor control of the wheels is done by calling the function `wheels_set_spee
 
 The car is equipped with 6 ultrasonic sensors. To measure a distance, we send a 10us signal on the Trigger pin of the sensor. In return, the function `HAL_GPIO_EXTI_Callback` (file `main.c`) measures the duration of the signal on the Echo pin. This duration is directly proportional to the measured distance: **distance\[cm] = echoDuration\[us] / 58**. 
 
-The measurements are made one by one, each measurement lasting 40ms. The measurements are updated with a period of 400ms. It can be changed by changing the value of the `PERIOD_UPDATE_US` constant in the `Inc/main.h` file. The distances of the 6 sensors are stored in the variable usDistance before being sent to the Raspberry by the CAN bus. 
+The measurements are made one by one, each measurement lasting 40ms. The measurements are updated with a period of 50ms. It can be changed by changing the value of the `PERIOD_UPDATE_US` constant in the `Inc/main.h` file. The distances of the 6 sensors are stored in the variable usDistance before being sent to the Raspberry by the CAN bus. 
 
 * Distance range : \[4cm - 535cm]
 * Maximum echo duration: 31ms
